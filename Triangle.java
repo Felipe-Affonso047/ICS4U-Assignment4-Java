@@ -11,6 +11,11 @@
  */
 public class Triangle {
     /**
+    * Constant.
+    */
+    private static final double HALF_PIE = 1.5707963267948966;
+
+    /**
     * Side virables.
     */
     private int side1;
@@ -29,6 +34,7 @@ public class Triangle {
     * @param newSide1 side
     * @param newSide2 side
     * @param newSide3 side
+    * @throws ArithmeticException error
     */
     public Triangle(final int newSide1, final int newSide2,
                    final int newSide3) {
@@ -69,19 +75,20 @@ public class Triangle {
     }
 
     /**
-    * Is valid.
+    * Is valid?.
     *
-    * @param side1
-    * @param side2
-    * @param side3
     * @return true or false.
     */
-    private boolean isValid(final int side1, final int side2, final int side3) {
-        if ((side1 + side2 > side3) && (side1 + side3 > side2) && (side2 + side3 > side1)) {
-            return true;
+    private boolean isValid() {
+        final boolean returnVal;
+        if (side1 + side2 > side3
+            && side1 + side3 > side2
+            && side2 + side3 > side1) {
+            returnVal = true;
         } else {
-            return false;
+            returnVal = false;
         }
+        return returnVal;
     }
 
     /**
@@ -122,20 +129,70 @@ public class Triangle {
     *
     * @return name
     */
-    public String getName() {
+    public String getType() {
         String returnVal = "";
         if (this.side1 == this.side2 && this.side1 == this.side3) {
             returnVal = "Equilateral";
-        } else if (this.side1 == this.side2 || this.side2 == this.side3 || this.side1 == this.side3) {
+        } else if (this.side1 == this.side2
+                   || this.side2 == this.side3
+                   || this.side1 == this.side3) {
             returnVal = "Isoceles";
         } else {
             returnVal = "Scalene";
+        }
+
+        if (this.getAngle1() == HALF_PIE
+            || this.getAngle2() == HALF_PIE
+            || this.getAngle3() == HALF_PIE) {
+            returnVal = returnVal + " Square";
+        } else if (this.getAngle1() > HALF_PIE
+                   || this.getAngle2() > HALF_PIE
+                   || this.getAngle3() > HALF_PIE) {
+            returnVal = returnVal + " Obituse";
+        } else {
+            returnVal = returnVal + " Acute";
         }
         return returnVal;
     }
 
     /**
-    * Get height
+    * Get Angle.
+    *
+    * @return angle
+    */
+    public double getAngle1() {
+        return Math.acos((Math.pow(this.side2, 2)
+                          + Math.pow(this.side3, 2)
+                          - Math.pow(this.side1, 2))
+                          / (2 * this.side2 * this.side3));
+    }
+
+    /**
+    * Get Angle.
+    *
+    * @return angle
+    */
+    public double getAngle2() {
+        return Math.acos((Math.pow(this.side1, 2)
+                          + Math.pow(this.side3, 2)
+                          - Math.pow(this.side2, 2))
+                          / (2 * this.side3 * this.side1));
+    }
+
+    /**
+    * Get Angle.
+    *
+    * @return angle
+    */
+    public double getAngle3() {
+        return Math.acos((Math.pow(this.side2, 2)
+                          + Math.pow(this.side1, 2)
+                          - Math.pow(this.side3, 2))
+                          / (2 * this.side2 * this.side1));
+    }
+
+    /**
+    * Get height.
     *
     * @return hight
     */
@@ -145,7 +202,7 @@ public class Triangle {
     }
 
     /**
-    * Get height
+    * Get height.
     *
     * @return hight
     */
@@ -155,7 +212,7 @@ public class Triangle {
     }
 
     /**
-    * Get height
+    * Get height.
     *
     * @return hight
     */
@@ -165,11 +222,11 @@ public class Triangle {
     }
 
     /**
-    * inner circle Radius
+    * Inner circle Radius.
     *
     * @return radius
     */
-    public double getInnerCircleRadius(){
+    public double getInnerCircleRadius() {
         return this.getArea() / this.getSemiPerimeter();
     }
 
@@ -178,8 +235,9 @@ public class Triangle {
     *
     * @return radius
     */
-    public double getCircumsicleRadius(){
-        final  double radius = (this.side1 * this.side2 * this.side3) / (this.getArea() * 4);
+    public double getCircumsicleRadius() {
+        final double radius = (this.side1 * this.side2 * this.side3)
+                              / (this.getArea() * 4);
         return radius;
     }
 }
